@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useState } from "react";
-import Response from "./Response";
-import TabsNavigation from "./TabsNavigation";
+import TabsNavigation from "@/components/Request/TabsNavigation";
 import { Send } from "lucide-react";
+import ResponseTabNavigation from "../Response/ResponseTabNavigation";
 
 const methods = ["GET", "POST", "PUT", "PATCH", "DELETE"];
 
@@ -14,9 +14,11 @@ const Request = () => {
   const [headers, setHeaders] = useState([]);
   const [body, setBody] = useState("");
   const [response, setResponse] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setIsLoading(true);
 
     try {
       const urlObj = new URL(url);
@@ -55,39 +57,61 @@ const Request = () => {
         headers: {},
         body: null,
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
   // console.log(response);
 
   return (
-    <div className="rounded-lg shadow-sm border border-gray-200">
-      <form onSubmit={handleSubmit} className="p-4">
-        <div className="flex gap-2">
+    <div
+      className="w-full rounded-lg border border-gray-200 bg-white shadow-sm"
+      role="region"
+      aria-label="API Request Form"
+    >
+      <form onSubmit={handleSubmit} className="p-3 md:p-4">
+        <div className="flex flex-col gap-3 md:flex-row md:gap-2">
+          <label className="sr-only" htmlFor="method-select">
+            HTTP Method
+          </label>
           <select
+            id="method-select"
             value={method}
             onChange={(event) => setMethod(event.target.value)}
-            className="px-3 py-2 bg-gray-50 border border-gray-300 rounded-md text-sm font-medium text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="w-full rounded-md border border-gray-200 bg-gray-50 px-3 py-2 text-sm font-medium text-gray-700 outline-none hover:border-gray-300 md:w-auto"
           >
             {methods.map((item) => (
               <option key={item}>{item}</option>
             ))}
           </select>
 
+          <label className="sr-only" htmlFor="url-input">
+            URL
+          </label>
           <input
-            type="text"
+            id="url-input"
+            type="url"
             value={url}
             placeholder="Enter URL"
             onChange={(event) => setUrl(event.target.value)}
-            className="flex-1 px-3 py-2 bg-white border border-gray-300 rounded-md text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="flex-1 rounded-md border border-gray-200 px-3 py-2 text-sm text-gray-900 placeholder-gray-400 outline-none hover:border-gray-300"
+            required
           />
 
           <button
             type="submit"
-            className="inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+            disabled={isLoading}
+            className={`inline-flex items-center justify-center rounded-md px-4 py-2 text-sm font-medium text-white outline-none ${
+              isLoading
+                ? "bg-blue-400 cursor-not-allowed"
+                : "bg-blue-600 hover:bg-blue-700"
+            }`}
           >
-            <Send className="w-4 h-4 mr-2" />
-            Send
+            <Send
+              className={`mr-2 h-4 w-4 ${isLoading ? "animate-pulse" : ""}`}
+            />
+            {isLoading ? "Sending..." : "Send"}
           </button>
         </div>
       </form>
@@ -101,7 +125,7 @@ const Request = () => {
         setBody={setBody}
       />
 
-      {response && <Response {...response} />}
+      <div>{response && <ResponseTabNavigation {...response} />}</div>
     </div>
   );
 };

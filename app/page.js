@@ -1,8 +1,8 @@
-import Request from "@/components/Request";
+import Request from "@/components/Request/Request";
 
 const Home = () => {
   return (
-    <div className="m-10">
+    <div className="m-6">
       <Request />
     </div>
   );

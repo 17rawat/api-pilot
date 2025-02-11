@@ -1,5 +1,5 @@
 import React from "react";
-import { Plus, X } from "lucide-react";
+import { Plus, Trash } from "lucide-react";
 
 const QueryParams = ({ queryParams, setQueryParams }) => {
   const addQueryParam = () => {
@@ -18,30 +18,30 @@ const QueryParams = ({ queryParams, setQueryParams }) => {
   };
 
   return (
-    <div>
-      <div className="space-y-3">
+    <div className="space-y-4">
+      <div className="max-h-[200px] space-y-3 overflow-y-auto">
         {queryParams.map((param, index) => (
-          <div key={index} className="flex gap-2">
+          <div key={index} className="flex flex-col gap-2 sm:flex-row">
             <input
               type="text"
               placeholder="Key"
               value={param.key}
               onChange={(e) => handleChange(index, "key", e.target.value)}
-              className="flex-1 px-3 py-2 bg-white border border-gray-300 rounded-md text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="flex-1 rounded-md border border-gray-200 px-3 py-2 text-sm text-gray-900 placeholder-gray-400 outline-none hover:border-gray-300"
             />
             <input
               type="text"
               placeholder="Value"
               value={param.value}
               onChange={(e) => handleChange(index, "value", e.target.value)}
-              className="flex-1 px-3 py-2 bg-white border border-gray-300 rounded-md text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="flex-1 rounded-md border border-gray-200 px-3 py-2 text-sm text-gray-900 placeholder-gray-400 outline-none hover:border-gray-300"
             />
             <button
               type="button"
               onClick={() => removeQueryParam(index)}
-              className="p-2 text-gray-400 hover:text-gray-500"
+              className="inline-flex items-center justify-center rounded-md p-2 text-red-400 outline-none hover:bg-red-50 hover:text-red-600"
             >
-              <X className="w-5 h-5" />
+              <Trash className="h-5 w-5" />
             </button>
           </div>
         ))}
@@ -50,10 +50,10 @@ const QueryParams = ({ queryParams, setQueryParams }) => {
       <button
         type="button"
         onClick={addQueryParam}
-        className="mt-4 inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+        className="inline-flex items-center rounded-md border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-700 outline-none hover:bg-gray-50"
       >
-        <Plus className="w-4 h-4 mr-2" />
-        Add Query Param
+        <Plus className="mr-2 h-4 w-4" />
+        Add Params
       </button>
     </div>
   );
