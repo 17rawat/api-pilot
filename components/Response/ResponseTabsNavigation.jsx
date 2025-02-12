@@ -5,7 +5,13 @@ import Cookies from "@/components/Response/Cookies";
 import React, { useState } from "react";
 import { FileText, Settings, Cookie } from "lucide-react";
 
-const ResponseTabNavigation = ({ status, statusText, body, headers }) => {
+const ResponseTabsNavigation = ({
+  status,
+  statusText,
+  body,
+  headers,
+  cookies,
+}) => {
   const tabs = [
     {
       name: "Response",
@@ -23,6 +29,7 @@ const ResponseTabNavigation = ({ status, statusText, body, headers }) => {
       name: "Cookies",
       component: Cookies,
       icon: Cookie,
+      props: { cookies },
     },
   ];
 
@@ -58,4 +65,4 @@ const ResponseTabNavigation = ({ status, statusText, body, headers }) => {
   );
 };
 
-export default ResponseTabNavigation;
+export default ResponseTabsNavigation;

@@ -2,11 +2,11 @@
 
 import React, { useState } from "react";
 import QueryParams from "@/components/Request/QueryParams";
-import Headers from "@/components/Request/Headers";
-import Body from "@/components/Request/Body";
+import RequestHeaders from "@/components/Request/RequestHeaders";
+import RequestBody from "@/components/Request/RequestBody";
 import { Database, FileJson, Settings } from "lucide-react";
 
-const TabsNavigation = ({
+const RequestTabsNavigation = ({
   queryParams,
   setQueryParams,
   headers,
@@ -24,13 +24,13 @@ const TabsNavigation = ({
     {
       name: "Headers",
       icon: Settings,
-      component: Headers,
+      component: RequestHeaders,
       props: { headers, setHeaders },
     },
     {
       name: "Body",
       icon: FileJson,
-      component: Body,
+      component: RequestBody,
       props: { body, setBody },
     },
   ];
@@ -76,4 +76,4 @@ const TabsNavigation = ({
   );
 };
 
-export default TabsNavigation;
+export default RequestTabsNavigation;

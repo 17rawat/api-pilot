@@ -1,7 +1,7 @@
 import React from "react";
 
 const ResponseHeaders = ({ headers }) => {
-  console.log(headers);
+  // console.log(headers);
 
   return (
     <div className="overflow-hidden rounded-lg border border-gray-200">
