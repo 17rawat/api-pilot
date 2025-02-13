@@ -2,11 +2,10 @@ export async function POST(request) {
   try {
     const { url, method, headers, body } = await request.json();
 
-    // console.log(url, method, headers, body);
-
     const requestConfig = {
       method,
       headers,
+      credentials: "include",
     };
 
     if (["POST", "PUT", "PATCH"].includes(method) && body) {
@@ -18,21 +17,19 @@ export async function POST(request) {
     let responseData;
     const contentType = response.headers.get("content-type");
 
-    if (contentType && contentType.includes("application/json")) {
-      responseData = await response.json();
-    } else {
-      responseData = await response.text();
-    }
+    responseData =
+      contentType && contentType.includes("application/json")
+        ? await response.json()
+        : await response.text();
 
     const formattedHeaders = {};
 
     response.headers.forEach((value, key) => {
       if (key === "set-cookie") {
-        if (!formattedHeaders[key]) {
-          formattedHeaders[key] = [];
-        }
-        const cookies = value.split(",").map((cookie) => cookie.trim());
-        formattedHeaders[key].push(...cookies);
+        formattedHeaders[key] = formattedHeaders[key] || [];
+        formattedHeaders[key] = formattedHeaders[key].concat(
+          value.split(/,(?=\s*\w+=)/)
+        );
       } else {
         formattedHeaders[key] = value;
       }
@@ -45,14 +42,13 @@ export async function POST(request) {
       body: responseData,
     });
   } catch (error) {
-    return Response.json(
-      {
-        status: "Error",
-        statusText: error.message,
-        headers: {},
-        body: null,
-      },
-      { status: 500 }
-    );
+    // console.error("Request processing error:", error);
+
+    return Response.json({
+      status: "500",
+      statusText: error.message || "An unexpected error occurred",
+      headers: {},
+      body: {},
+    });
   }
 }
