@@ -2,7 +2,7 @@ import Request from "@/components/Request/Request";
 
 const Home = () => {
   return (
-    <div className="m-6">
+    <div className="h-screen p-6 bg-gray-100">
       <Request />
     </div>
   );

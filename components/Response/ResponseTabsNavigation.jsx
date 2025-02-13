@@ -5,13 +5,7 @@ import Cookies from "@/components/Response/Cookies";
 import React, { useState } from "react";
 import { FileText, Settings, Cookie } from "lucide-react";
 
-const ResponseTabsNavigation = ({
-  status,
-  statusText,
-  body,
-  headers,
-  cookies,
-}) => {
+const ResponseTabsNavigation = ({ status, statusText, body, headers }) => {
   const tabs = [
     {
       name: "Response",
@@ -29,7 +23,7 @@ const ResponseTabsNavigation = ({
       name: "Cookies",
       component: Cookies,
       icon: Cookie,
-      props: { cookies },
+      props: { cookies: headers["set-cookie"] || [] },
     },
   ];
 
@@ -37,18 +31,18 @@ const ResponseTabsNavigation = ({
   const CurrentTabComponent = tabs[currentTab].component;
 
   return (
-    <div className="border-t border-gray-200">
-      <div className="flex overflow-x-auto">
+    <div className="h-full flex flex-col">
+      <div className="flex overflow-x-auto border-b bg-gray-50">
         {tabs.map((tab, index) => {
           const Icon = tab.icon;
           return (
             <button
               key={tab.name}
               onClick={() => setCurrentTab(index)}
-              className={`flex min-w-[120px] items-center justify-center gap-2 px-4 py-3 text-sm font-medium transition-colors outline-none ${
+              className={`flex min-w-[120px] items-center justify-center gap-2 px-4 py-3 text-sm font-medium transition-all duration-200 outline-none ${
                 currentTab === index
-                  ? "border-b-2 border-blue-600 text-blue-600"
-                  : "border-b-2 border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700"
+                  ? "border-b-2 border-blue-600 bg-white text-blue-600"
+                  : "border-b-2 border-transparent text-gray-600 hover:border-gray-300 hover:text-gray-800"
               }`}
             >
               <Icon className="h-4 w-4" />
@@ -58,7 +52,7 @@ const ResponseTabsNavigation = ({
         })}
       </div>
 
-      <div className="p-4">
+      <div className="flex-1 min-h-0">
         <CurrentTabComponent {...tabs[currentTab].props} />
       </div>
     </div>

@@ -39,7 +39,10 @@ const RequestTabsNavigation = ({
   const CurrentTabComponent = tabs[currentTab].component;
 
   return (
-    <div className="rounded-lg border bg-white shadow-sm" role="tablist">
+    <div
+      className="rounded-lg border bg-white shadow-sm h-[250px] flex flex-col"
+      role="tablist"
+    >
       <div className="flex overflow-x-auto border-b bg-gray-50">
         {tabs.map((tab, index) => {
           const Icon = tab.icon;
@@ -65,7 +68,7 @@ const RequestTabsNavigation = ({
       </div>
 
       <div
-        className="p-4 md:p-6"
+        className="flex-1 min-h-0 p-4"
         role="tabpanel"
         aria-labelledby={`${tabs[currentTab].name}-tab`}
         id={`${tabs[currentTab].name}-panel`}

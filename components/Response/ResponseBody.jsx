@@ -21,8 +21,8 @@ const ResponseBody = ({ status, statusText, body }) => {
   };
 
   return (
-    <div className="bg-white rounded-lg shadow">
-      <div className="flex flex-wrap items-center gap-2 sm:gap-3 p-4 border-b border-gray-200">
+    <div className="flex flex-col h-full bg-white rounded-lg shadow">
+      <div className="flex flex-wrap items-center gap-2 sm:gap-3 p-4 border-b border-gray-200 bg-white sticky top-0 z-10">
         <StatusIcon
           className={`w-6 h-6 ${isSuccess ? "text-green-500" : "text-red-500"}`}
         />
@@ -38,13 +38,13 @@ const ResponseBody = ({ status, statusText, body }) => {
         </span>
       </div>
 
-      <div className="max-h-[300px] sm:max-h-[500px] overflow-y-auto rounded-b-lg">
+      <div className="flex-1 min-h-0 overflow-auto">
         <SyntaxHighlighter
           language="json"
           style={tomorrow}
           customStyle={{
             margin: 0,
-            borderRadius: "0 0 0.5rem 0.5rem",
+            height: "100%",
           }}
         >
           {formatBody()}
