@@ -5,7 +5,6 @@ export async function POST(request) {
     const requestConfig = {
       method,
       headers,
-      credentials: "include",
     };
 
     if (["POST", "PUT", "PATCH"].includes(method) && body) {
@@ -42,8 +41,6 @@ export async function POST(request) {
       body: responseData,
     });
   } catch (error) {
-    // console.error("Request processing error:", error);
-
     return Response.json({
       status: "500",
       statusText: error.message || "An unexpected error occurred",

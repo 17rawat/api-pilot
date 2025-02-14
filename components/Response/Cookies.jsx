@@ -2,45 +2,28 @@ import React from "react";
 import { Copy, Download } from "lucide-react";
 import { handleCopy } from "@/utils/handleCopy";
 import { handleDownload } from "@/utils/handleDownload";
-
-const parseCookie = (cookieStr) => {
-  const parts = cookieStr.split(";").map((part) => part.trim());
-  const [nameValue, ...attributes] = parts;
-  const [name, value] = nameValue.split("=");
-
-  return {
-    name,
-    value,
-    path:
-      attributes
-        .find((attr) => attr.toLowerCase().startsWith("path="))
-        ?.split("=")[1] || "",
-    httpOnly: attributes.some((attr) => attr.toLowerCase() === "httponly"),
-    secure: attributes.some((attr) => attr.toLowerCase() === "secure"),
-  };
-};
+import { cookieParser } from "@/utils/cookieParser";
 
 const TableRow = ({ cookie }) => {
-  const parsedCookie = parseCookie(cookie);
+  const { name, value, path, httpOnly, secure, nameValuePair } =
+    cookieParser(cookie);
 
   return (
     <tr className="hover:bg-gray-50">
-      <td className="px-4 py-2 text-sm font-medium text-gray-900">
-        {parsedCookie.name}
-      </td>
+      <td className="px-4 py-2 text-sm font-medium text-gray-900">{name}</td>
       <td className="px-4 py-2 text-sm text-gray-500 font-mono break-all">
-        {parsedCookie.value}
+        {value}
       </td>
-      <td className="px-4 py-2 text-sm text-gray-500">{parsedCookie.path}</td>
+      <td className="px-4 py-2 text-sm text-gray-500">{path}</td>
       <td className="px-4 py-2 text-sm text-gray-500">
-        {parsedCookie.httpOnly ? "true" : "false"}
+        {httpOnly ? "true" : "false"}
       </td>
       <td className="px-4 py-2 text-sm text-gray-500">
-        {parsedCookie.secure ? "true" : "false"}
+        {secure ? "true" : "false"}
       </td>
       <td className="px-4 py-2">
         <button
-          onClick={() => handleCopy(cookie)}
+          onClick={() => handleCopy(nameValuePair)}
           className="p-1 hover:bg-gray-200 rounded"
           title="Copy cookie"
         >
@@ -49,7 +32,7 @@ const TableRow = ({ cookie }) => {
       </td>
       <td className="px-4 py-2">
         <button
-          onClick={() => handleDownload(cookie)}
+          onClick={() => handleDownload(nameValuePair)}
           className="p-1 hover:bg-gray-200 rounded"
           title="Download cookie"
         >
@@ -106,16 +89,24 @@ const CookiesTable = ({ cookies }) => (
   </table>
 );
 
-const Cookies = ({ cookies }) => (
-  <div className="h-full bg-white">
-    {cookies.length > 0 ? (
-      <div className="h-full overflow-auto">
-        <CookiesTable cookies={cookies} />
-      </div>
-    ) : (
-      <EmptyState />
-    )}
-  </div>
-);
+const Cookies = ({ cookies }) => {
+  const value = cookies
+    .map((cookie) => cookieParser(cookie).value)
+    .filter((v) => v === "");
+
+  // console.log(value.length);
+
+  return (
+    <div className="h-full bg-white">
+      {cookies.length > 0 && value.length === 0 ? (
+        <div className="h-full overflow-auto">
+          <CookiesTable cookies={cookies} />
+        </div>
+      ) : (
+        <EmptyState />
+      )}
+    </div>
+  );
+};
 
 export default Cookies;

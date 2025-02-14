@@ -5,6 +5,7 @@ import RequestTabsNavigation from "@/components/Request/RequestTabsNavigation";
 import { Send } from "lucide-react";
 import ResponseTabsNavigation from "@/components/Response/ResponseTabsNavigation";
 import { DEFAULT_HEADERS } from "@/utils/defaultHeaders";
+import { updateHeadersWithCookies } from "@/utils/updateHeadersWithCookies";
 const methods = ["GET", "POST", "PUT", "PATCH", "DELETE"];
 
 const Request = () => {
@@ -40,7 +41,6 @@ const Request = () => {
 
       const response = await fetch("/api/proxy", {
         method: "POST",
-
         body: JSON.stringify({
           url: finalUrl,
           method,
@@ -49,7 +49,19 @@ const Request = () => {
         }),
       });
 
+      // console.log(response);
+
       const data = await response.json();
+
+      // Set Cookie in headers for further requests
+      if (data.headers["set-cookie"]?.length > 0) {
+        const updatedHeaders = updateHeadersWithCookies(
+          headers,
+          data.headers["set-cookie"][0]
+        );
+        setHeaders(updatedHeaders);
+      }
+
       setResponse(data);
     } catch (error) {
       // console.log(error);
